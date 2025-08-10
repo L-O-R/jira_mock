@@ -30,9 +30,24 @@ const SignupForm = ({ switchToLogin }) => {
     resolver: yupResolver(signupSchema),
   });
 
+  let getUserData =
+    JSON.parse(localStorage.getItem("userData")) || [];
+
   const onSubmit = (data) => {
-    console.log("Signup Data:", data);
-    // Add your signup logic here
+    const uniquieId = new Date();
+    const userDetails = {
+      ...data,
+      id: uniquieId.getTime(),
+    };
+    console.log("Signup Data:", userDetails);
+    console.log(getUserData);
+    // add the feature to check if user exist or not later
+    getUserData.push(userDetails);
+    //storing the data after check
+    localStorage.setItem(
+      "userData",
+      JSON.stringify(getUserData)
+    );
   };
 
   return (
@@ -47,7 +62,7 @@ const SignupForm = ({ switchToLogin }) => {
           <input
             {...register("username")}
             placeholder="Username"
-            className="w-full bg-transparent border-b border-border py-2 px-0 focus:outline-none focus:border-primary text-background placeholder:text-text/70"
+            className="w-full text-text bg-transparent border-b border-border py-2 px-0 focus:outline-none focus:border-primary text-background placeholder:text-text/70"
           />
           {errors.username && (
             <p className="text-warning text-sm mt-1">
@@ -60,7 +75,7 @@ const SignupForm = ({ switchToLogin }) => {
           <input
             {...register("email")}
             placeholder="Email"
-            className="w-full bg-transparent border-b border-border py-2 px-0 focus:outline-none focus:border-primary text-background placeholder:text-text/70"
+            className="w-full bg-transparent text-text border-b border-border py-2 px-0 focus:outline-none focus:border-primary text-background placeholder:text-text/70"
           />
           {errors.email && (
             <p className="text-warning text-sm mt-1">
@@ -75,7 +90,7 @@ const SignupForm = ({ switchToLogin }) => {
             autoComplete="New-Password"
             {...register("password")}
             placeholder="Password"
-            className="w-full bg-transparent border-b border-border py-2 px-0 focus:outline-none focus:border-primary text-background placeholder:text-text/70"
+            className="w-full bg-transparent text-text border-b border-border py-2 px-0 focus:outline-none focus:border-primary text-background placeholder:text-text/70"
           />
           {errors.password && (
             <p className="text-warning text-sm mt-1">
@@ -90,7 +105,7 @@ const SignupForm = ({ switchToLogin }) => {
             autoComplete="Confirm-Password"
             {...register("confirmPassword")}
             placeholder="Confirm Password"
-            className="w-full bg-transparent border-b border-border py-2 px-0 focus:outline-none focus:border-primary text-background placeholder:text-text/70"
+            className="w-full text-text bg-transparent border-b border-border py-2 px-0 focus:outline-none focus:border-primary text-background placeholder:text-text/70"
           />
           {errors.confirmPassword && (
             <p className="text-warning text-sm mt-1">

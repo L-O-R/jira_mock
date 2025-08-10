@@ -1,7 +1,8 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-
+import { useNavigate } from "react-router-dom";
+import React from "react";
 // Login Form Schema
 const loginSchema = yup.object({
   username: yup.string().required("Username is required"),
@@ -17,9 +18,39 @@ const LoginForm = ({ switchToSignup }) => {
     resolver: yupResolver(loginSchema),
   });
 
+  //  creating state temprorly
+  const [login, setLogin] = React.useState(false);
+
+  // React.useEffect(() => {
+  //   if (login) {
+
+  //   }
+  // }, [login]);
+
+  const Navigate = useNavigate();
+  let UserData =
+    JSON.parse(localStorage.getItem("userData")) || [];
   const onSubmit = (data) => {
     console.log("Login Data:", data);
-    // Add your login logic here
+    if (UserData.length > 0) {
+      UserData.forEach((user) => {
+        console.log(user);
+        // simple check if username and password is correct or not, improve it later
+        if (
+          user.username === data.username &&
+          user.password === data.password
+        ) {
+          alert("Login Successfull");
+          // add redirect logic here
+          setLogin(true);
+          Navigate("/Dashboard", { replace: true });
+        } else {
+          alert("invalid User");
+        }
+      });
+    } else {
+      alert("user not available");
+    }
   };
 
   return (

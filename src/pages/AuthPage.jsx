@@ -6,7 +6,7 @@ import React, {
 import gsap from "gsap";
 import LoginForm from "../components/Auth/Login";
 import SignupForm from "../components/Auth/Signup";
-
+import Loginbanner from "../assets/img/loginbanner.jpg";
 const AuthPage = () => {
   const cardRef = useRef(null);
   const [isLoginVisible, setIsLoginVisible] =
@@ -35,13 +35,14 @@ const AuthPage = () => {
   return (
     <div className="flex h-screen w-full overflow-hidden">
       {/* Left half: Image container */}
-      <div
-        className="w-1/2 h-full bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url('https://source.unsplash.com/random/1920x1080/?abstract')",
-        }}>
+      <div className="w-1/2 h-full bg-cover bg-center">
         {/* Optional: Add text or content here if needed */}
+        {/* fix the image later */}
+        <img
+          src={Loginbanner}
+          alt="Kanban"
+          className="w-full h-full object-cover mix-blend-multiply"
+        />
       </div>
 
       {/* Right half: Forms container with perspective for 3D */}

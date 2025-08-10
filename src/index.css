@@ -1,0 +1,45 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+
+@theme {
+  --font-family: "Outfit", sans-serif;
+
+  /* Light mode colors (defaults) */
+  --color-primary: #0052cc;
+  /* Blue for actions/buttons */
+  --color-secondary: #2684ff;
+  /* Light blue for highlights */
+  --color-accent: #36b37e;
+  /* Green for success/completed */
+  --color-warning: #de350b;
+  /* Red for errors */
+  --color-background: #ffffff;
+  /* White background */
+  --color-surface: #f4f5f7;
+  /* Light gray for cards */
+  --color-text: #172b4d;
+  /* Dark gray text */
+  --color-border: #dfe1e6;
+  /* Medium gray borders */
+}
+
+@layer theme {
+  :root,
+  :host {
+    @variant dark {
+      --color-primary: #4c9aff; /* Brighter blue */
+      --color-secondary: #79f2c0; /* Teal-ish blue */
+      --color-accent: #57d9a3; /* Lime green */
+      --color-warning: #ffab00; /* Orange-red */
+      --color-background: #091e42; /* Dark gray background */
+      --color-surface: #060d1a; /* Dark gray */
+      --color-text: #b3bac5; /* Light gray text */
+      --color-border: #253858; /* Subtle gray borders */
+    }
+  }
+}
+
+/* Apply font globally */
+body {
+  font-family: var(--font-family);
+}

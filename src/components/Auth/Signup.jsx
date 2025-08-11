@@ -73,7 +73,7 @@ const SignupForm = ({ switchToLogin }) => {
           <input
             {...register("username")}
             placeholder="Username"
-            className="w-full text-text bg-transparent border-b border-border py-2 px-0 focus:outline-none focus:border-primary text-background placeholder:text-text/70"
+            className="w-full bg-transparent border-b border-border py-2 px-0 focus:outline-none focus:border-primary   placeholder:text-text/70"
           />
           {errors.username && (
             <p className="text-warning text-sm mt-1">
@@ -86,7 +86,7 @@ const SignupForm = ({ switchToLogin }) => {
           <input
             {...register("email")}
             placeholder="Email"
-            className="w-full bg-transparent text-text border-b border-border py-2 px-0 focus:outline-none focus:border-primary text-background placeholder:text-text/70"
+            className="w-full bg-transparent text-text border-b border-border py-2 px-0 focus:outline-none focus:border-primary placeholder:text-text/70"
           />
           {errors.email && (
             <p className="text-warning text-sm mt-1">
@@ -101,7 +101,7 @@ const SignupForm = ({ switchToLogin }) => {
             autoComplete="New-Password"
             {...register("password")}
             placeholder="Password"
-            className="w-full bg-transparent text-text border-b border-border py-2 px-0 focus:outline-none focus:border-primary text-background placeholder:text-text/70"
+            className="w-full bg-transparent text-text border-b border-border py-2 px-0 focus:outline-none focus:border-primary   placeholder:text-text/70"
           />
           {errors.password && (
             <p className="text-warning text-sm mt-1">
@@ -116,7 +116,7 @@ const SignupForm = ({ switchToLogin }) => {
             autoComplete="Confirm-Password"
             {...register("confirmPassword")}
             placeholder="Confirm Password"
-            className="w-full text-text bg-transparent border-b border-border py-2 px-0 focus:outline-none focus:border-primary text-background placeholder:text-text/70"
+            className="w-full text-text bg-transparent border-b border-border py-2 px-0 focus:outline-none focus:border-primary   placeholder:text-text/70"
           />
           {errors.confirmPassword && (
             <p className="text-warning text-sm mt-1">
@@ -134,7 +134,7 @@ const SignupForm = ({ switchToLogin }) => {
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-primary text-background rounded shadow-md hover:bg-secondary transition-colors hover:shadow-lg">
+            className="px-4 py-2 bg-primary   rounded shadow-md hover:bg-secondary transition-colors hover:shadow-lg">
             Sign Up
           </button>
         </div>

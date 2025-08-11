@@ -18,15 +18,6 @@ const LoginForm = ({ switchToSignup }) => {
     resolver: yupResolver(loginSchema),
   });
 
-  //  creating state temprorly
-  const [login, setLogin] = React.useState(false);
-
-  // React.useEffect(() => {
-  //   if (login) {
-
-  //   }
-  // }, [login]);
-
   const Navigate = useNavigate();
   let UserData =
     JSON.parse(localStorage.getItem("userData")) || [];

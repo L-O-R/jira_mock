@@ -41,7 +41,18 @@ const SignupForm = ({ switchToLogin }) => {
     };
     console.log("Signup Data:", userDetails);
     console.log(getUserData);
-    // add the feature to check if user exist or not later
+    //added feature to check if user exist or not
+    if (
+      getUserData.some(
+        (u) =>
+          u.username === data.username ||
+          u.email === data.email
+      )
+    ) {
+      alert("User already exists");
+      return;
+    }
+
     getUserData.push(userDetails);
     //storing the data after check
     localStorage.setItem(

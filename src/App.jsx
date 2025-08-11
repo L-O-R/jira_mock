@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import CustomCursor from "./components/UI/CustomCursor";
 import Summary from "./components/dashboard/Summary";
 import ProjectOverview from "./components/dashboard/ProjectOverview";
+import ProtectedRoute from "./components/Auth/ProtectedRoute";
 
 const App = () => {
   return (
@@ -17,13 +18,16 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<AuthPage />} />
-          <Route path="/Dashboard" element={<Dashboard />}>
+          <Route
+            path="/Dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }>
+            <Route index element={<Summary />} />
             <Route
-              path="/Dashboard"
-              element={<Summary />}
-            />
-            <Route
-              path="/Dashboard/overview"
+              path="overview"
               element={<ProjectOverview />}
             />
           </Route>

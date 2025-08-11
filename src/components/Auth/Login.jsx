@@ -36,16 +36,17 @@ const LoginForm = ({ switchToSignup }) => {
       UserData.forEach((user) => {
         console.log(user);
         // simple check if username and password is correct or not, improve it later
-        if (
-          user.username === data.username &&
-          user.password === data.password
-        ) {
-          alert("Login Successfull");
-          // add redirect logic here
-          setLogin(true);
+        const users = UserData.find(
+          (u) =>
+            u.username === data.username &&
+            u.password === data.password
+        );
+        if (users) {
+          alert("Login Successful");
+          localStorage.setItem("isAuthenticated", "true");
           Navigate("/Dashboard", { replace: true });
         } else {
-          alert("invalid User");
+          alert("Invalid credentials");
         }
       });
     } else {

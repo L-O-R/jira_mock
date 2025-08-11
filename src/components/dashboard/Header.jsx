@@ -5,7 +5,14 @@ const Header = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    navigate("/", { replace: true });
+    const confirmLogout = window.confirm(
+      "Are you sure you want to log out?"
+    );
+    if (confirmLogout) {
+      localStorage.removeItem("isAuthenticated");
+      //  user data to store and remove it from here
+      navigate("/", { replace: true });
+    }
   };
 
   return (

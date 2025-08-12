@@ -16,8 +16,8 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-[var(--color-surface)] text-[var(--color-text)] border-b border-[var(--color-border)] px-6 py-4">
-      <div className="container mx-auto flex items-center justify-between">
+    <header className="bg-surface text-text border-b border-border px-6 py-4">
+      <div className=" flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold">
             Welcome To Jira Dashboard
@@ -25,14 +25,14 @@ const Header = () => {
         </div>
 
         <nav className="flex items-center space-x-4">
-          <select className="bg-transparent border border-[var(--color-border)] rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] cursor-pointer">
+          <select className="bg-transparent border border-border rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer">
             <option value="">Name</option>
             <option value="profile">Profile</option>
           </select>
 
           <button
             onClick={handleLogout}
-            className="bg-[var(--color-primary)] text-white px-4 py-1.5 rounded text-sm hover:bg-[var(--color-secondary)] transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--color-primary)]">
+            className="bg-surface border border-border cursor-pointer text-text px-4 py-1.5 rounded text-sm hover:bg-secoundary transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
             Logout
           </button>
         </nav>

@@ -26,9 +26,6 @@ const ProjectOverview = () => {
           <button className="px-4 py-2 bg-surface text-text rounded-lg">
             Create project
           </button>
-          <button className="px-4 py-2 bg-surface text-text rounded-lg border border-border">
-            Templates
-          </button>
         </div>
       </div>
 

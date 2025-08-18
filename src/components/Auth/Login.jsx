@@ -22,19 +22,22 @@ const LoginForm = ({ switchToSignup }) => {
   let UserData =
     JSON.parse(localStorage.getItem("userData")) || [];
   const onSubmit = (data) => {
-    console.log("Login Data:", data);
     if (UserData.length > 0) {
       UserData.forEach((user) => {
-        console.log(user);
         // simple check if username and password is correct or not, improve it later
         const users = UserData.find(
           (u) =>
             u.username === data.username &&
             u.password === data.password
         );
+        console.log(users);
         if (users) {
           alert("Login Successful");
           localStorage.setItem("isAuthenticated", "true");
+          localStorage.setItem(
+            "user",
+            JSON.stringify(users)
+          );
           Navigate("/Dashboard", { replace: true });
         } else {
           alert("Invalid credentials");

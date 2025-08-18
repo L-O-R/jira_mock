@@ -11,6 +11,7 @@ const Header = () => {
     if (confirmLogout) {
       localStorage.removeItem("isAuthenticated");
       //  user data to store and remove it from here
+      localStorage.removeItem("user");
       navigate("/", { replace: true });
     }
   };
@@ -26,7 +27,12 @@ const Header = () => {
 
         <nav className="flex items-center space-x-4">
           <select className="bg-transparent border border-border rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer">
-            <option value="">Name</option>
+            <option value="">
+              {
+                JSON.parse(localStorage.getItem("user"))
+                  .username
+              }
+            </option>
             <option value="profile">Profile</option>
           </select>
 

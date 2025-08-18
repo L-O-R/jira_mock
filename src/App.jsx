@@ -10,6 +10,7 @@ import CustomCursor from "./components/UI/CustomCursor";
 import Summary from "./components/dashboard/Summary";
 import ProjectOverview from "./components/dashboard/ProjectOverview";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
+import ProjectDetails from "./components/dashboard/ProjectDetails";
 
 const App = () => {
   return (
@@ -29,6 +30,10 @@ const App = () => {
             <Route
               path="overview"
               element={<ProjectOverview />}
+            />
+            <Route
+              path=":id"
+              element={<ProjectDetails />}
             />
           </Route>
         </Routes>

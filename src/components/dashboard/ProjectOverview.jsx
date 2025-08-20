@@ -5,10 +5,8 @@ import { Link } from "react-router-dom";
 const ProjectOverview = () => {
   const [openPortal, setOpenPortal] = React.useState(false);
   const [projects, setProjects] = React.useState([]);
-  // hanndle onclick to open portal
-  const handleClick = () => {
-    setOpenPortal(true);
-  };
+
+  const handleClick = () => setOpenPortal(true);
 
   useEffect(() => {
     let data =
@@ -17,9 +15,16 @@ const ProjectOverview = () => {
   }, []);
 
   let user = JSON.parse(localStorage.getItem("user"));
+
+  // ✅ show projects where user is owner OR member
   let filterData = projects.filter((pr) => {
-    console.log(pr.userId);
-    return pr.userId === user.id;
+    if (pr.userId === user.id) return true;
+    if (
+      pr.members &&
+      pr.members.some((m) => m.userId === user.id)
+    )
+      return true;
+    return false;
   });
 
   return (
@@ -31,13 +36,12 @@ const ProjectOverview = () => {
         <div className="flex gap-2">
           <button
             className="px-4 py-2 bg-surface text-text rounded-lg"
-            onClick={() => handleClick()}>
+            onClick={handleClick}>
             Create project
           </button>
         </div>
       </div>
 
-      {/* open portal or modal for creating project */}
       {openPortal && (
         <ModelPortal onClose={() => setOpenPortal(false)} />
       )}
@@ -60,21 +64,20 @@ const ProjectOverview = () => {
           </tr>
         </thead>
         <tbody>
-          {(filterData.length > 0 &&
+          {filterData.length > 0 ? (
             filterData.map((project, idx) => (
               <tr
                 key={idx}
-                className="border-b border-border hover:bg-bacground text-text transition">
+                className="border-b border-border hover:bg-surface/70 text-text transition">
                 <td className="p-3 text-primary cursor-pointer">
                   {project.name}
                 </td>
                 <td className="p-3">{project.type}</td>
                 <td className="p-3 flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-primary text-text flex items-center justify-center text-sm font-medium">
-                    {/* {project.lead.initials} */} add
-                    later
+                  <div className="w-8 h-8 rounded-full bg-primary text-background flex items-center justify-center text-sm font-medium">
+                    {project.name[0].toUpperCase()}
                   </div>
-                  {/* {project.lead.name}  */} add later
+                  {project.name} Lead
                 </td>
                 <td className="p-3 text-center">
                   <Link
@@ -84,7 +87,8 @@ const ProjectOverview = () => {
                   </Link>
                 </td>
               </tr>
-            ))) || (
+            ))
+          ) : (
             <tr>
               <td
                 colSpan={4}

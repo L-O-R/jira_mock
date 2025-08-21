@@ -8,6 +8,7 @@ const KanbanColumn = ({
   addTask,
   members,
   currentUser,
+  onUpdateTask,
 }) => {
   return (
     <div className="bg-surface rounded p-4 min-h-[200px]">
@@ -29,6 +30,7 @@ const KanbanColumn = ({
           moveTask={moveTask}
           members={members}
           currentUser={currentUser}
+          onUpdateTask={onUpdateTask}
         />
       ))}
     </div>

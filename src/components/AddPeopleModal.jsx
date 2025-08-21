@@ -66,9 +66,14 @@ const AddPeopleModal = ({ project, onClose }) => {
           onChange={(e) =>
             setSelectedUserId(e.target.value)
           }>
-          <option value="">-- Choose User --</option>
+          <option value="" className="text-text">
+            -- Choose User --
+          </option>
           {users.map((u) => (
-            <option key={u.id} value={u.id}>
+            <option
+              key={u.id}
+              value={u.id}
+              className="text-text">
               {u.username} ({u.email})
             </option>
           ))}

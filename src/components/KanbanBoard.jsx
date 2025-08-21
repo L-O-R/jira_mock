@@ -8,6 +8,7 @@ const KanbanBoard = ({
   addTask,
   members,
   currentUser,
+  onUpdateTask,
 }) => {
   return (
     <div className="grid grid-cols-3 gap-4 text-text">
@@ -20,6 +21,7 @@ const KanbanBoard = ({
           addTask={addTask}
           members={members}
           currentUser={currentUser}
+          onUpdateTask={onUpdateTask}
         />
       ))}
     </div>

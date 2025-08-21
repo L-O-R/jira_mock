@@ -1,27 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import { useParams } from "react-router-dom";
-import AddPeopleModal from "../AddPeopleModal"; // same modal we built earlier
+import AddPeopleModal from "../AddPeopleModal";
+import KanbanBoard from "../KanbanBoard";
 
 const statuses = ["todo", "inprogress", "done"];
 
 const ProjectDetails = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // projectId = createdAt
   const [tasks, setTasks] = useState([]);
   const [project, setProject] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const [showAddPeople, setShowAddPeople] = useState(false);
 
-  useEffect(() => {
-    // ✅ load project
+  const refreshProject = useCallback(() => {
     const projects =
       JSON.parse(localStorage.getItem("projectData")) || [];
-    const found = projects.find((p) => p.createdAt === id);
+    const found =
+      projects.find((p) => p.createdAt === id) || null;
     setProject(found);
+  }, [id]);
 
-    // ✅ load tasks
+  useEffect(() => {
+    // load project + tasks + user
+    refreshProject();
     const storedTasks =
       JSON.parse(localStorage.getItem(`tasks-${id}`)) || [];
     setTasks(storedTasks);
-  }, [id]);
+    setCurrentUser(
+      JSON.parse(localStorage.getItem("user")) || null
+    );
+  }, [id, refreshProject]);
 
   const moveTask = (taskId, direction) => {
     const updated = tasks.map((task) => {
@@ -50,12 +62,25 @@ const ProjectDetails = () => {
       id: Date.now().toString(),
       content,
       status,
+      assigneeId: null, // unassigned by default
     };
     const updated = [...tasks, newTask];
     setTasks(updated);
     localStorage.setItem(
       `tasks-${id}`,
       JSON.stringify(updated)
+    );
+  };
+
+  // Called by KanbanTask when assigning or editing the task
+  const onUpdateTask = (updatedTask) => {
+    const newTasks = tasks.map((t) =>
+      t.id === updatedTask.id ? updatedTask : t
+    );
+    setTasks(newTasks);
+    localStorage.setItem(
+      `tasks-${id}`,
+      JSON.stringify(newTasks)
     );
   };
 
@@ -66,42 +91,40 @@ const ProjectDetails = () => {
 
   return (
     <div className="p-6 bg-border min-h-screen">
-      {/* Project Header */}
+      {/* Header with members + Add People */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-text">
           {project.name} – Kanban Board
         </h2>
 
-        {/* Members List */}
         <div className="flex items-center gap-4">
-          {project.members &&
-            project.members.map((m) => {
-              const users =
-                JSON.parse(
-                  localStorage.getItem("userData")
-                ) || [];
-              const user = users.find(
-                (u) => u.id === m.userId
-              );
-              return (
-                <div
-                  key={m.userId}
-                  className="flex items-center gap-2 bg-surface px-3 py-1 rounded-lg shadow">
-                  <div className="w-8 h-8 rounded-full bg-primary text-background flex items-center justify-center font-medium">
-                    {user?.username?.[0]?.toUpperCase() ||
-                      "U"}
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-text">
-                      {user?.username || "Unknown"}
-                    </p>
-                    <span className="text-xs text-secondary capitalize">
-                      {m.role}
-                    </span>
-                  </div>
+          {(project.members || []).map((m) => {
+            const users =
+              JSON.parse(
+                localStorage.getItem("userData")
+              ) || [];
+            const user = users.find(
+              (u) => u.id === m.userId
+            );
+            return (
+              <div
+                key={m.userId}
+                className="flex items-center gap-2 bg-surface px-3 py-1 rounded-lg shadow">
+                <div className="w-8 h-8 rounded-full bg-primary text-background flex items-center justify-center font-medium">
+                  {user?.username?.[0]?.toUpperCase() ||
+                    "U"}
                 </div>
-              );
-            })}
+                <div>
+                  <p className="text-sm font-medium text-text">
+                    {user?.username || `User ${m.userId}`}
+                  </p>
+                  <span className="text-xs text-secondary capitalize">
+                    {m.role}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
 
           <button
             onClick={() => setShowAddPeople(true)}
@@ -111,60 +134,27 @@ const ProjectDetails = () => {
         </div>
       </div>
 
-      {/* Add People Modal */}
       {showAddPeople && (
         <AddPeopleModal
           project={project}
-          onClose={() => setShowAddPeople(false)}
+          onClose={() => {
+            setShowAddPeople(false);
+            // re-read project so the members list updates without a full refresh
+            refreshProject();
+          }}
         />
       )}
 
       {/* Kanban Board */}
-      <div className="grid grid-cols-3 gap-4 text-text">
-        {statuses.map((status) => (
-          <div
-            key={status}
-            className="bg-surface rounded p-4 min-h-[200px]">
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="text-xl text-text font-semibold capitalize">
-                {status.replace(
-                  "inprogress",
-                  "In Progress"
-                )}
-              </h3>
-              <button
-                onClick={() => addTask(status)}
-                className="text-sm bg-primary text-background px-2 py-1 rounded hover:bg-primary/80">
-                + Create
-              </button>
-            </div>
-
-            {tasks
-              .filter((t) => t.status === status)
-              .map((task) => (
-                <div
-                  key={task.id}
-                  className="bg-white p-3 mb-3 rounded shadow">
-                  <p>{task.content}</p>
-                  <div className="mt-2 flex justify-between">
-                    <button
-                      onClick={() => moveTask(task.id, -1)}
-                      disabled={status === "todo"}
-                      className="text-sm px-2 py-1 bg-gray-300 rounded disabled:opacity-40">
-                      ←
-                    </button>
-                    <button
-                      onClick={() => moveTask(task.id, 1)}
-                      disabled={status === "done"}
-                      className="text-sm px-2 py-1 bg-gray-300 rounded disabled:opacity-40">
-                      →
-                    </button>
-                  </div>
-                </div>
-              ))}
-          </div>
-        ))}
-      </div>
+      <KanbanBoard
+        tasks={tasks}
+        statuses={statuses}
+        moveTask={moveTask}
+        addTask={addTask}
+        members={project.members || []}
+        currentUser={currentUser}
+        onUpdateTask={onUpdateTask}
+      />
     </div>
   );
 };

@@ -11,6 +11,7 @@ import Summary from "./components/dashboard/Summary";
 import ProjectOverview from "./components/dashboard/ProjectOverview";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 import ProjectDetails from "./components/dashboard/ProjectDetails";
+import NotificationModel from "./components/UI/NotificationModel";
 
 const App = () => {
   return (

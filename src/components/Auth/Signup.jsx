@@ -73,7 +73,7 @@ const SignupForm = ({ switchToLogin }) => {
           <input
             {...register("username")}
             placeholder="Username"
-            className="w-full bg-transparent border-b border-border py-2 px-0 focus:outline-none focus:border-primary   placeholder:text-text/70"
+            className="w-full bg-transparent border-b text-text border-border py-2 px-0 focus:outline-none focus:border-primary   placeholder:text-text/70"
           />
           {errors.username && (
             <p className="text-warning text-sm mt-1">

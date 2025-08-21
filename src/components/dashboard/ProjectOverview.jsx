@@ -28,7 +28,7 @@ const ProjectOverview = () => {
   });
 
   return (
-    <div className="p-6 bg-background min-h-screen overflow-auto">
+    <div className="p-6 bg-surface min-h-screen overflow-auto">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-text">
           Projects
@@ -82,8 +82,7 @@ const ProjectOverview = () => {
                 <td className="p-3 text-center">
                   <Link
                     to={`/Dashboard/${project.createdAt}`}>
-                    http://localhost:5173/Dashboard/
-                    {project.createdAt}
+                    Details
                   </Link>
                 </td>
               </tr>

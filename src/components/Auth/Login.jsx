@@ -2,13 +2,15 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
-import React from "react";
+import React, { useState } from "react";
+import NotificationModel from "../UI/NotificationModel";
 // Login Form Schema
 const loginSchema = yup.object({
   username: yup.string().required("Username is required"),
   password: yup.string().required("Password is required"),
 });
-
+// for notification
+// let content;
 const LoginForm = ({ switchToSignup }) => {
   const {
     register,
@@ -17,6 +19,9 @@ const LoginForm = ({ switchToSignup }) => {
   } = useForm({
     resolver: yupResolver(loginSchema),
   });
+
+  const [open, setOpen] = useState("");
+  const [message, setMessage] = useState("");
 
   const Navigate = useNavigate();
   let UserData =
@@ -30,7 +35,7 @@ const LoginForm = ({ switchToSignup }) => {
             u.username === data.username &&
             u.password === data.password
         );
-        console.log(users);
+        // console.log(users);
         if (users) {
           alert("Login Successful");
           localStorage.setItem("isAuthenticated", "true");
@@ -40,7 +45,8 @@ const LoginForm = ({ switchToSignup }) => {
           );
           Navigate("/Dashboard", { replace: true });
         } else {
-          alert("Invalid credentials");
+          setMessage("Invalid Credientials");
+          setOpen(true);
         }
       });
     } else {
@@ -50,6 +56,12 @@ const LoginForm = ({ switchToSignup }) => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full p-8">
+      <NotificationModel
+        state={open}
+        duration={1000}
+        onClose={() => setOpen(false)}>
+        {message}
+      </NotificationModel>
       <h2 className="text-3xl font-light mb-8 text-primary">
         Login
       </h2>

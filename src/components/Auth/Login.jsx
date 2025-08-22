@@ -3,7 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import NotificationModel from "../UI/NotificationModel";
+import useNotificationStore from "../../store/notificationStore";
 // Login Form Schema
 const loginSchema = yup.object({
   username: yup.string().required("Username is required"),
@@ -19,9 +19,8 @@ const LoginForm = ({ switchToSignup }) => {
   } = useForm({
     resolver: yupResolver(loginSchema),
   });
-
-  const [open, setOpen] = useState("");
-  const [message, setMessage] = useState("");
+  // notifcation state hook from store
+  const { showNotification } = useNotificationStore();
 
   const Navigate = useNavigate();
   let UserData =
@@ -37,7 +36,11 @@ const LoginForm = ({ switchToSignup }) => {
         );
         // console.log(users);
         if (users) {
-          alert("Login Successful");
+          showNotification(
+            "Login Successful",
+            "bg-green-400",
+            4000
+          );
           localStorage.setItem("isAuthenticated", "true");
           localStorage.setItem(
             "user",
@@ -45,23 +48,25 @@ const LoginForm = ({ switchToSignup }) => {
           );
           Navigate("/Dashboard", { replace: true });
         } else {
-          setMessage("Invalid Credientials");
-          setOpen(true);
+          // notification modal
+          showNotification(
+            "Invalid Credintials",
+            "bg-red-500",
+            2000
+          );
         }
       });
     } else {
-      alert("user not available");
+      showNotification(
+        "User not Found",
+        "bg-red-500",
+        3000
+      );
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full p-8">
-      <NotificationModel
-        state={open}
-        duration={1000}
-        onClose={() => setOpen(false)}>
-        {message}
-      </NotificationModel>
       <h2 className="text-3xl font-light mb-8 text-primary">
         Login
       </h2>

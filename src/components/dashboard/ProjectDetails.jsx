@@ -16,6 +16,10 @@ const ProjectDetails = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [showAddPeople, setShowAddPeople] = useState(false);
 
+  // acess logic acoding to role
+
+  // let currentUser = JSON.parse(localStorage.getItem("user"))
+
   const refreshProject = useCallback(() => {
     const projects =
       JSON.parse(localStorage.getItem("projectData")) || [];
@@ -34,6 +38,21 @@ const ProjectDetails = () => {
       JSON.parse(localStorage.getItem("user")) || null
     );
   }, [id, refreshProject]);
+
+  let userRole = null;
+
+  if (project) {
+    if (project.userId === currentUser.id) {
+      userRole = "admin";
+    } else {
+      userRole =
+        project.members?.find(
+          (m) => m.userId === currentUser.id
+        )?.role || "viewer";
+    }
+  }
+
+  console.log(userRole);
 
   const moveTask = (taskId, direction) => {
     const updated = tasks.map((task) => {
@@ -126,11 +145,13 @@ const ProjectDetails = () => {
             );
           })}
 
-          <button
-            onClick={() => setShowAddPeople(true)}
-            className="px-3 py-1 bg-primary text-background rounded-lg hover:bg-primary/80">
-            + Add People
-          </button>
+          {userRole === "admin" && (
+            <button
+              onClick={() => setShowAddPeople(true)}
+              className="px-3 py-1 bg-primary text-background rounded-lg hover:bg-primary/80">
+              + Add People
+            </button>
+          )}
         </div>
       </div>
 
@@ -154,6 +175,7 @@ const ProjectDetails = () => {
         members={project.members || []}
         currentUser={currentUser}
         onUpdateTask={onUpdateTask}
+        userRole={userRole}
       />
     </div>
   );

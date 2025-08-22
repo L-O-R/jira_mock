@@ -1,47 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import useNotificationStore from "../../store/notificationStore";
+const NotificationModel = () => {
+  const {
+    open,
+    message,
+    closeNotification,
+    color,
+    duration,
+  } = useNotificationStore();
 
-const NotificationModel = ({
-  state = false,
-  children,
-  duration = 3000,
-  onClose,
-}) => {
-  const [notify, setNotify] = useState(state);
-  console.log(notify);
+  // useEffect(() => {
+  //   if (open) {
+  //     open(true);
+  //   }
+  // }, [open]);
+
   useEffect(() => {
-    if (state) {
-      setNotify(true);
-    }
-  }, [state]);
-
-  useEffect(() => {
-    if (notify) {
-      const timer = setTimeout(() => {
-        setNotify(false);
-        // Call onClose callback if provided
-        if (onClose) {
-          onClose();
-        }
-      }, duration);
-
-      // Cleanup timer on unmount or when notify changes
+    if (open) {
+      const timer = setTimeout(
+        () => closeNotification(),
+        duration
+      );
       return () => clearTimeout(timer);
     }
-  }, [notify, duration, onClose]);
+  }, [open, closeNotification]);
 
   // Don't render anything if not notifying
-  if (!notify) {
+  if (!open) {
     return null;
   }
 
   return (
     <div
-      className={`fixed top-10 right-10 z-[1000] bg-accent p-6 rounded-xl transition-all duration-300 ease-in-out transform ${
-        notify
+      className={`fixed top-10 right-10 z-[1000] ${color} p-6 rounded-xl transition-all duration-300 ease-in-out transform ${
+        open
           ? "translate-x-0 opacity-100"
           : "translate-x-full opacity-0"
       }`}>
-      {children}
+      {message}
     </div>
   );
 };

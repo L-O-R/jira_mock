@@ -16,6 +16,7 @@ import NotificationModel from "./components/UI/NotificationModel";
 const App = () => {
   return (
     <div className="relative">
+      <NotificationModel />
       <CustomCursor />
       <BrowserRouter>
         <Routes>

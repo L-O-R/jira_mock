@@ -5,6 +5,7 @@ const KanbanTask = ({
   moveTask,
   members = [],
   onUpdateTask,
+  userRole,
 }) => {
   const [showAssign, setShowAssign] = useState(false);
 
@@ -41,13 +42,13 @@ const KanbanTask = ({
           className="text-sm px-2 py-1 bg-gray-300 rounded disabled:opacity-40">
           ←
         </button>
-
-        <button
-          onClick={() => setShowAssign((s) => !s)}
-          className="text-sm px-2 py-1 bg-primary text-background rounded hover:bg-primary/80">
-          Assign
-        </button>
-
+        {userRole === "admin" && (
+          <button
+            onClick={() => setShowAssign((s) => !s)}
+            className="text-sm px-2 py-1 bg-primary text-background rounded hover:bg-primary/80">
+            Assign
+          </button>
+        )}
         <button
           onClick={() => moveTask(task.id, 1)}
           disabled={task.status === "done"}

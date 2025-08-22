@@ -1,6 +1,9 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
+import NotificationModel from "../UI/NotificationModel";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useState } from "react";
 // Signup Form Schema
 const signupSchema = yup.object({
   username: yup.string().required("Username is required"),
@@ -22,6 +25,9 @@ const signupSchema = yup.object({
 });
 
 const SignupForm = ({ switchToLogin }) => {
+  const [open, setOpen] = useState("");
+  const [message, setMessage] = useState("");
+  let navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -49,20 +55,33 @@ const SignupForm = ({ switchToLogin }) => {
           u.email === data.email
       )
     ) {
-      alert("User already exists");
+      setMessage("User already exist");
+      setOpen(true);
       return;
     }
 
+    setMessage("Sign up succesfful proceed to login page");
+    setOpen(true);
     getUserData.push(userDetails);
     //storing the data after check
     localStorage.setItem(
       "userData",
       JSON.stringify(getUserData)
     );
+    setTimeout(
+      () => navigate("/", { replace: true }),
+      2000
+    );
   };
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full p-8">
+      <NotificationModel
+        state={open}
+        duration={1000}
+        onClose={() => setOpen(false)}>
+        {message}
+      </NotificationModel>
       <h2 className="text-3xl font-light mb-8 text-primary">
         Sign Up
       </h2>

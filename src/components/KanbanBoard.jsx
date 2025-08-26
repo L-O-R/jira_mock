@@ -10,20 +10,25 @@ const KanbanBoard = ({
   currentUser,
   onUpdateTask,
   userRole,
+  onRenameColumn, // new
 }) => {
+  const tasksByStatus = (key) =>
+    tasks.filter((t) => t.status === key);
+
   return (
-    <div className="grid grid-cols-3 gap-4 text-text">
-      {statuses.map((status) => (
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {statuses.map((col) => (
         <KanbanColumn
-          key={status}
-          status={status}
-          tasks={tasks.filter((t) => t.status === status)}
+          key={col.id}
+          status={col}
+          tasks={tasksByStatus(col.key)}
           moveTask={moveTask}
           addTask={addTask}
           members={members}
           currentUser={currentUser}
           onUpdateTask={onUpdateTask}
           userRole={userRole}
+          onRenameColumn={onRenameColumn} // new
         />
       ))}
     </div>

@@ -9,78 +9,64 @@ const KanbanTask = ({
 }) => {
   const [showAssign, setShowAssign] = useState(false);
 
-  // All registered users (for names)
   const users =
     JSON.parse(localStorage.getItem("userData")) || [];
   const usernameById = (uid) =>
     users.find((u) => u.id === uid)?.username ||
     `User ${uid}`;
-
   const assigneeName = task.assigneeId
     ? usernameById(task.assigneeId)
     : null;
 
   const handleAssign = (userId) => {
-    if (!onUpdateTask) return; // safety
+    if (!onUpdateTask) return;
     const updatedTask = { ...task, assigneeId: userId };
     onUpdateTask(updatedTask);
     setShowAssign(false);
   };
 
+  const onDragStart = (e) => {
+    e.dataTransfer.setData("text/task-id", task.id);
+    e.dataTransfer.effectAllowed = "move";
+  };
+
   return (
-    <div className="bg-white p-3 mb-3 rounded shadow relative">
-      <p className="font-medium">{task.content}</p>
-
-      <p className="text-xs text-gray-600 mb-2">
+    <div
+      className="bg-white dark:bg-surface rounded border border-border p-3 shadow-sm cursor-move"
+      draggable
+      onDragStart={onDragStart}>
+      <div className="font-medium">{task.content}</div>
+      <div className="text-xs text-text/60 mt-1">
         Assigned to: {assigneeName || "Yet to be assigned"}
-      </p>
-
-      <div className="mt-2 flex justify-between">
-        <button
-          onClick={() => moveTask(task.id, -1)}
-          disabled={task.status === "todo"}
-          className="text-sm px-2 py-1 bg-gray-300 rounded disabled:opacity-40">
-          ←
-        </button>
-        {userRole === "admin" && (
-          <button
-            onClick={() => setShowAssign((s) => !s)}
-            className="text-sm px-2 py-1 bg-primary text-background rounded hover:bg-primary/80">
-            Assign
-          </button>
-        )}
-        <button
-          onClick={() => moveTask(task.id, 1)}
-          disabled={task.status === "done"}
-          className="text-sm px-2 py-1 bg-gray-300 rounded disabled:opacity-40">
-          →
-        </button>
       </div>
 
-      {showAssign && (
-        <div className="absolute top-12 right-2 bg-surface border border-border rounded shadow-lg p-2 z-50 w-48">
-          {members.length > 0 ? (
-            members.map((m) => (
-              <button
-                key={m.userId}
-                onClick={() => handleAssign(m.userId)}
-                className="block w-full text-left px-2 py-1 hover:bg-primary/10 rounded">
-                {usernameById(m.userId)}{" "}
-                <span className="text-xs text-gray-500">
-                  ({m.role})
-                </span>
-              </button>
-            ))
-          ) : (
-            <p className="text-sm text-gray-500 px-2 py-1">
-              No members
-            </p>
-          )}
+      {userRole === "admin" && (
+        <div className="mt-2">
           <button
-            onClick={() => handleAssign(null)}
-            className="block w-full text-left mt-1 px-2 py-1 hover:bg-primary/10 rounded text-sm">
-            Unassign
+            className="text-xs px-2 py-1 bg-secondary text-white rounded"
+            onClick={() => setShowAssign((s) => !s)}>
+            Assign
           </button>
+          {showAssign && (
+            <div className="mt-2 flex flex-wrap gap-2">
+              {members?.length ? (
+                members.map((m) => (
+                  <button
+                    key={m.userId}
+                    className="text-xs px-2 py-1 border rounded hover:bg-surface"
+                    onClick={() => handleAssign(m.userId)}>
+                    {users.find((u) => u.id === m.userId)
+                      ?.username || `User ${m.userId}`}{" "}
+                    ({m.role})
+                  </button>
+                ))
+              ) : (
+                <span className="text-xs text-text/60">
+                  No members
+                </span>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

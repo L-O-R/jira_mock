@@ -27,30 +27,7 @@
   /* Medium gray borders */
 }
 
-@layer theme {
-
-  :root,
-  :host {
-    @variant dark {
-      --color-primary: #4c9aff;
-      /* Brighter blue */
-      --color-secondary: #79f2c0;
-      /* Teal-ish blue */
-      --color-accent: #57d9a3;
-      /* Lime green */
-      --color-warning: #ffab00;
-      /* Orange-red */
-      --color-background: #091e42;
-      /* Dark gray background */
-      --color-surface: #060d1a;
-      /* Dark gray */
-      --color-text: #b3bac5;
-      /* Light gray text */
-      --color-border: #253858;
-      /* Subtle gray borders */
-    }
-  }
-}
+/*  */
 
 /* Apply font globally */
 body {

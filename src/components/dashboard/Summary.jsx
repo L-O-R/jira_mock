@@ -3,24 +3,69 @@ import React, { useState } from "react";
 const Summary = () => {
   const [summary, setSummary] = useState("");
   const [loading, setLoading] = useState(false);
-  console.log(import.meta.env.VITE_HF_API_KEY);
+
+  const getProjectsAndTasks = () => {
+    const projects =
+      JSON.parse(localStorage.getItem("projectData")) || [];
+    const users =
+      JSON.parse(localStorage.getItem("userData")) || [];
+
+    const findUser = (id) =>
+      users.find((u) => u.id === id)?.username || "Unknown";
+
+    let text = "Project Overview:\n\n";
+
+    projects.forEach((project) => {
+      text += `📌 Project: ${project.name} (${project.type})\n`;
+      text += `👥 Members: ${
+        project.members
+          .map((m) => findUser(m.userId))
+          .join(", ") || "None"
+      }\n`;
+
+      const tasksKey = `tasks-${project.createdAt}`;
+      const tasks =
+        JSON.parse(localStorage.getItem(tasksKey)) || [];
+
+      if (tasks.length > 0) {
+        text += `Tasks:\n`;
+        tasks.forEach((task) => {
+          text += ` - ${task.content || "Untitled task"} [${
+            task.status
+          }]`;
+          if (task.assigneeId)
+            text += ` (Assigned to: ${findUser(
+              task.assigneeId
+            )})`;
+          text += `\n`;
+        });
+      } else {
+        text += "No tasks yet.\n";
+      }
+      text += "\n";
+    });
+
+    return text;
+  };
+
   const generateSummary = async () => {
     setLoading(true);
     try {
+      const inputText = getProjectsAndTasks();
+
+      console.log(inputText);
+
       const response = await fetch(
         "https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
         {
           method: "POST",
           headers: {
             Authorization: `Bearer ${
-              import.meta.env.HF_API_KEY
+              import.meta.env.VITE_HF_API_KEY
             }`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            inputs:
-              "Summarize all project details from my app.",
-          }),
+          body: JSON.stringify({ inputs: inputText }),
         }
       );
 
@@ -49,7 +94,7 @@ const Summary = () => {
       </button>
 
       {summary && (
-        <div className="mt-4 p-4 bg-surface rounded shadow">
+        <div className="mt-4 p-4 bg-surface rounded shadow whitespace-pre-line">
           <p>{summary}</p>
         </div>
       )}

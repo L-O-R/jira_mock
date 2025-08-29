@@ -5,7 +5,7 @@ import ProjectOverview from "./ProjectOverview";
 
 const Main = () => {
   return (
-    <main className="flex-2">
+    <main className="flex-2 overflow-y-auto pb-40 bg-surface">
       <Outlet />
     </main>
   );
